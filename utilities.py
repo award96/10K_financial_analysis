@@ -1,5 +1,6 @@
 import traceback
 
+
 def safe_index(dict_obj, key, returnOnError, printObject=False):
     try:
         return dict_obj[key]
@@ -10,7 +11,8 @@ def safe_index(dict_obj, key, returnOnError, printObject=False):
         if printObject:
             print(f"problematic dict_obj:\n{dict_obj}\n")
         return returnOnError
-        
+
+
 def clean_duplicates(messyList):
     output = []
     d = {}

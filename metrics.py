@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 
+
 def calc_acc(df, start_yr, end_yr):
     start_str, end_str = str(start_yr) + 'vel', str(end_yr) + 'vel'
     df = df[df[start_str].notnull()]
@@ -17,4 +18,3 @@ def calc_acc(df, start_yr, end_yr):
 if __name__ == "__main__":
     df = pd.read_csv('SP_netIncome_vel.csv')
     df = calc_acc(df, 2019, 2018)
-

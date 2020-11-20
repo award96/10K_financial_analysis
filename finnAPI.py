@@ -6,17 +6,21 @@ import time
 """
 
 API_KEY_PATH = "api.txt"
+
+
 def get_api_key():
 
-    with open(API_KEY_PATH,'r') as file:
+    with open(API_KEY_PATH, 'r') as file:
         api_key_raw = file.readline()
         if "\n" in api_key_raw:
-            api_key = api_key_raw.replace("\n","")
+            api_key = api_key_raw.replace("\n", "")
         else:
             api_key = api_key_raw
         return api_key
 
+
 API_KEY = get_api_key()
+
 
 def handle_response(response, callback_function, symbol):
     try:
@@ -28,11 +32,15 @@ def handle_response(response, callback_function, symbol):
         time.sleep(60)
         json_resp = callback_function(symbol)
     return json_resp
-    
+
+
 def get_tenK_json(symbol):
-    r = requests.get(f'https://finnhub.io/api/v1/stock/financials-reported?symbol={symbol}&token={API_KEY}')
+    r = requests.get(
+        f'https://finnhub.io/api/v1/stock/financials-reported?symbol={symbol}&token={API_KEY}')
     return handle_response(r, get_tenK_json, symbol)
 
+
 def get_profile_json(symbol):
-    r = requests.get(f'https://finnhub.io/api/v1/stock/profile2?symbol={symbol}&token={API_KEY}')
+    r = requests.get(
+        f'https://finnhub.io/api/v1/stock/profile2?symbol={symbol}&token={API_KEY}')
     return handle_response(r, get_profile_json, symbol)

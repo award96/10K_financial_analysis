@@ -4,6 +4,7 @@ import finnAPI
 import readWrite
 from utilities import safe_index
 
+
 def parse_tenK(tenKJSON):
     pass
 
@@ -17,6 +18,7 @@ def count_names(arr):
             rd[item] = 1
     return rd
 
+
 def dict_to_sorted_array(d, term):
     concepts, count = [], []
     for key in d.keys():
@@ -26,7 +28,8 @@ def dict_to_sorted_array(d, term):
     df = pd.DataFrame.from_dict(temp_dict)
     df = df.sort_values(by=['count'], ascending=False)
     return df
-    
+
+
 def find_best_keys(filepath):
 
     symbol_arr = readWrite.read_lines_to_array(filepath)
@@ -34,13 +37,13 @@ def find_best_keys(filepath):
     for symbol in symbol_arr:
         print(f"\non symbol: {symbol}")
         tenKJSON = finnAPI.get_tenK_json(symbol)
-        filings = safe_index(tenKJSON,'data',[],True)
+        filings = safe_index(tenKJSON, 'data', [], True)
         for tenK in filings:
             report = safe_index(tenK, 'report', {}, True)
             income = safe_index(report, 'ic', [], True)
             for json in income:
-                concept = safe_index(json, 'concept',  '', True)
-                label = safe_index(json, 'label',  '', True)
+                concept = safe_index(json, 'concept', '', True)
+                label = safe_index(json, 'label', '', True)
                 concept_arr.append(concept)
                 label_arr.append(label)
     print("\n#########################\nhave all data\n")
@@ -60,8 +63,4 @@ def find_best_keys(filepath):
     print(label_df)
 
 
-
 find_best_keys('splist.txt')
-
-
-

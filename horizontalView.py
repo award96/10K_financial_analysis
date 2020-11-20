@@ -16,12 +16,14 @@ def generate_years_list(year, baseYear):
         [2019, 2018, 2017]
     """
     if (baseYear > year):
-        raise ValueError("baseYear must be less than year.\nThis error was raised by 'generate_years_list'")
+        raise ValueError(
+            "baseYear must be less than year.\nThis error was raised by 'generate_years_list'")
     output = []
     while year >= baseYear:
         output.append(year)
         year -= 1
     return output
+
 
 def generate_empty_df(symbol_list, df, colNames, baseLength):
     empty_rows = []
@@ -40,6 +42,7 @@ def generate_empty_df(symbol_list, df, colNames, baseLength):
     empty_df = pd.DataFrame(empty_rows, columns=colNames)
     return empty_df
 
+
 def naming_convention(year):
     return (str(year) + 'val')
 
@@ -53,11 +56,12 @@ def name_columns(yearsList, base=['symbol', 'industry', 'marketCap']):
         colNames.append(naming_convention(year))
     return (colNames, baseLength)
 
+
 def fill_horizontal_df(horizontal_df, df, yearsList, key):
-    for i in range(horizontal_df.shape[0]): # fill in empty horizontal df
+    for i in range(horizontal_df.shape[0]):  # fill in empty horizontal df
         df_this_symb = df[df['symbol'] == horizontal_df.iloc[i]['symbol']]
 
-        for year in yearsList: # iterate through each year
+        for year in yearsList:  # iterate through each year
             lastYear = year - 1
             df_this_year = df_this_symb[df['year'] == year]
             if (df_this_year.shape[0] > 1):
@@ -68,9 +72,18 @@ def fill_horizontal_df(horizontal_df, df, yearsList, key):
             if valid_index:
                 valueThisYear = df_this_year.iloc[0][key]
 
-            horizontal_df.at[i,naming_convention(year)] = valueThisYear
+            horizontal_df.at[i, naming_convention(year)] = valueThisYear
 
-def generate_horizontal_df(filepath, year, baseYear, key="netIncome", baseCols=['symbol', 'industry', 'marketCap']):
+
+def generate_horizontal_df(
+    filepath,
+    year,
+    baseYear,
+    key="netIncome",
+    baseCols=[
+        'symbol',
+        'industry',
+        'marketCap']):
     df = pd.read_csv(filepath, index_col=0)
     yearsList = generate_years_list(year, baseYear)
     colNames, baseLength = name_columns(yearsList, base=baseCols)
