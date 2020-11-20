@@ -43,6 +43,7 @@ def generate_empty_df(symbol_list, df, colNames, baseLength):
 def naming_convention(year):
     return (str(year) + 'val')
 
+
 def name_columns(yearsList, base=['symbol', 'industry', 'marketCap']):
     colNames = base
     baseLength = len(colNames)
@@ -69,17 +70,13 @@ def fill_horizontal_df(horizontal_df, df, yearsList, key):
 
             horizontal_df.at[i,naming_convention(year)] = valueThisYear
 
-def generate_horizontal_df(filepath, year, baseYear, key="netIncome"):
+def generate_horizontal_df(filepath, year, baseYear, key="netIncome", baseCols=['symbol', 'industry', 'marketCap']):
     df = pd.read_csv(filepath, index_col=0)
     yearsList = generate_years_list(year, baseYear)
-    colNames, baseLength = name_columns(yearsList)
+    colNames, baseLength = name_columns(yearsList, base=baseCols)
     df.sort_values(by=['symbol', 'year'])
     symbol_list_duplicates = df['symbol'].tolist()
     symbol_list = clean_duplicates(symbol_list_duplicates)
     horizontal_df = generate_empty_df(symbol_list, df, colNames, baseLength)
     fill_horizontal_df(horizontal_df, df, yearsList, key)
     return horizontal_df
-
-result = generate_horizontal_df('SP10K_data.csv', 2019, 2011)
-result.info()
-print(result.head(25))
