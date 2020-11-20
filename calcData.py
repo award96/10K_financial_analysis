@@ -78,16 +78,6 @@ def generate_horizontal_df(filepath, year, baseYear, key="netIncome"):
     symbol_list = clean_duplicates(symbol_list_duplicates)
     horizontal_df = generate_empty_df(symbol_list, df, colNames, baseLength)
     fill_horizontal_df(horizontal_df, df, yearsList, key)
-            
-    """
-        So I think i've successfully fixed calcData's issue of not thinking of things in a pandas-friendly
-        way. From here we need to iterate through yearsList and assign values by key.
-
-
-        Current bug: indexing to iloc[0] but the row is numbered based on its position in the last dataframe
-
-
-    """
     return horizontal_df
 
 result = generate_horizontal_df('SP10K_data.csv', 2019, 2011)
