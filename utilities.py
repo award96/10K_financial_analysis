@@ -11,3 +11,13 @@ def safe_index(dict_obj, key, returnOnError, printObject=False):
             print(f"problematic dict_obj:\n{dict_obj}\n")
         return returnOnError
         
+def clean_duplicates(messyList):
+    output = []
+    d = {}
+    for item in messyList:
+        if item in d:
+            continue
+        else:
+            output.append(item)
+            d[item] = True
+    return output

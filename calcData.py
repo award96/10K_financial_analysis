@@ -2,58 +2,94 @@ import pandas as pd
 import numpy as np
 
 import readWrite
+from utilities import clean_duplicates
 
 
-def get_velocity_row(df, key='netIncome', compare = [2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011]):
-    vel_row = [df.iloc[0]['symbol'], df.iloc[0]['industry'], df.iloc[0]['marketCap']]
-    init_length = len(vel_row)
-    placeholders = [np.nan] * len(compare)
-    vel_row.extend(placeholders)
-    years = df['year'].tolist()
-    compare_indx = 0
-    for i in range(len(years) - 1):
-        while compare_indx < len(compare) and years[i] != compare[compare_indx]:
-            compare_indx += 1
-        if years[i] - 1 == years[i+1]:
-            if compare_indx >= len(compare):
-                break
-            this_vel = df.iloc[i][key] - df.iloc[i+1][key]
-            vel_row[compare_indx + init_length] = this_vel
-        compare_indx += 1
-    return vel_row
+def generate_years_list(year, baseYear):
+    """
+    ARGS:
+        year (int) - usually the current year
+        baseYear (int) - the start year (must be less than year)
+    RETURNS:
+        a list of ints. Descends from year to baseYear. Includes baseYear
+        if the input is (2019, 2017) the list will be:
+        [2019, 2018, 2017]
+    """
+    if (baseYear > year):
+        raise ValueError("baseYear must be less than year.\nThis error was raised by 'generate_years_list'")
+    output = []
+    while year >= baseYear:
+        output.append(year)
+        year -= 1
+    return output
 
-def get_velocities(inputPath, outputPath):
-    df = pd.read_csv(inputPath, index_col=0)
-    
-    velocity_rows = []
-    # 2019vel is: netIncome(2019) - netIncome(2018)
-    cols = ['symbol', 'industry', 'marketcap', '2019vel', '2018vel', '2017vel', '2016vel', '2015vel', '2014vel', '2013vel', '2012vel', '2011vel']
-    # Ensure all of each company's rows are adjacent
-    df.sort_values(by=['symbol', 'year'])
+def generate_empty_df(symbol_list, df, colNames, baseLength):
+    empty_rows = []
 
-    length = df.shape[0]
-    symb = df.iloc[0]['symbol']
-    i = 0
-    while i < length:
-        symb = df.iloc[i]['symbol']
-        print(f"\non symb = {symb}")
+    for symb in symbol_list:
+        newRow = []
+        newRow.append(symb)
         df_this_symb = df[df['symbol'] == symb]
-        newRow = get_velocity_row(df_this_symb)
-        print(f"\nnewRow:\n{newRow}\n\n")
-        velocity_rows.append(newRow)
-        while i < length and df.iloc[i]['symbol'] == symb:
-            i += 1
-    vel_df = pd.DataFrame(velocity_rows, columns=cols)
-    vel_df.info()
-    print(vel_df.head(20))
-    vel_df.to_csv(outputPath)
-    
+        industry = df_this_symb.iloc[0]['industry']
+        marketCap = df_this_symb.iloc[0]['marketCap']
+        newRow.extend([industry, marketCap])
+        empty_vals = [np.nan] * (len(colNames) - baseLength)
+        newRow.extend(empty_vals)
+
+        empty_rows.append(newRow)
+    empty_df = pd.DataFrame(empty_rows, columns=colNames)
+    return empty_df
+
+def naming_convention(year):
+    return (str(year) + 'val')
+
+def name_columns(yearsList, base=['symbol', 'industry', 'marketCap']):
+    colNames = base
+    baseLength = len(colNames)
+    for i in range(len(yearsList)):
+        year = yearsList[i]
+        # columns : [base, 2019val, 2018val, ...]
+        colNames.append(naming_convention(year))
+    return (colNames, baseLength)
+
+def fill_horizontal_df(horizontal_df, df, yearsList, key):
+    for i in range(horizontal_df.shape[0]): # fill in empty horizontal df
+        df_this_symb = df[df['symbol'] == horizontal_df.iloc[i]['symbol']]
+
+        for year in yearsList: # iterate through each year
+            lastYear = year - 1
+            df_this_year = df_this_symb[df['year'] == year]
+            if (df_this_year.shape[0] > 1):
+                #print(f"\nThe dataframe has multiple rows for the year {year}. This script assumes 1 row, the 2nd will not be counted. Here is the dataframe\n{df_this_year}\n")
+                pass
+            valueThisYear = np.nan
+            valid_index = df_this_year.first_valid_index()
+            if valid_index:
+                valueThisYear = df_this_year.iloc[0][key]
+
+            horizontal_df.at[i,naming_convention(year)] = valueThisYear
+
+def generate_horizontal_df(filepath, year, baseYear, key="netIncome"):
+    df = pd.read_csv(filepath, index_col=0)
+    yearsList = generate_years_list(year, baseYear)
+    colNames, baseLength = name_columns(yearsList)
+    df.sort_values(by=['symbol', 'year'])
+    symbol_list_duplicates = df['symbol'].tolist()
+    symbol_list = clean_duplicates(symbol_list_duplicates)
+    horizontal_df = generate_empty_df(symbol_list, df, colNames, baseLength)
+    fill_horizontal_df(horizontal_df, df, yearsList, key)
+            
+    """
+        So I think i've successfully fixed calcData's issue of not thinking of things in a pandas-friendly
+        way. From here we need to iterate through yearsList and assign values by key.
 
 
+        Current bug: indexing to iloc[0] but the row is numbered based on its position in the last dataframe
 
 
+    """
+    return horizontal_df
 
-if __name__ == "__main__":
-    #filter_na('SP10K_data.csv', 'SP10k_data_clean.csv')
-    #count_incomplete('SP10k_data_clean.csv')
-    get_velocities('SP10K_data.csv', 'SP_netIncome_vel.csv')
+result = generate_horizontal_df('SP10K_data.csv', 2019, 2011)
+result.info()
+print(result.head(25))
