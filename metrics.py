@@ -14,6 +14,11 @@ def calc_acc(df, start_yr, end_yr):
     print(df.head(25))
     return df
 
+def horizontal(start, end):
+    val = end - start
+    percent = val * 100 / start
+    return (val, percent)
+
 
 if __name__ == "__main__":
     df = pd.read_csv('SP_netIncome_vel.csv')
