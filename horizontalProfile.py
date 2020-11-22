@@ -14,6 +14,7 @@ class HorizontalProfile(HorizontalSuper):
         baseYear=2018,
         year=2019,
         symbol=None,
+        industry=None,
         outputPath=None,
         inputPath=None,
         key="netIncome",
@@ -24,6 +25,7 @@ class HorizontalProfile(HorizontalSuper):
 
         super().__init__(filepath, 
             symbol=symbol, 
+            industry=industry,
             outputPath=outputPath, 
             inputPath=inputPath, 
             key=key, 
@@ -36,7 +38,7 @@ class HorizontalProfile(HorizontalSuper):
         self.analysis = []
 
     def __repr__(self):
-        start = f"HorizontalProfile from filepath: {self.filepath}\nYears range is {self.baseYear} to {self.year}\nThe values are from the key: {key}\n"
+        start = f"HorizontalProfile from filepath: {self.filepath}\nYears range is {self.baseYear} to {self.year}\nThe values are from the key: {self.key}\n"
         optionSymbol, optionOutput = "", ""
         if self.symbol:
             optionSymbol = f"the focus company is represented by the symbol {self.symbol}\n"
@@ -67,8 +69,11 @@ class HorizontalProfile(HorizontalSuper):
         return result
 
     def instantiate_df(self):
+        print(f"\n\nInstantiating df\nself.inputpath = {self.inputPath}")
         if self.inputPath:
+            print("reading from inputPath")
             return pd.read_csv(self.inputPath, index_col=0)
+        print("generating from filepath")
         return horizontalView.generate_horizontal_df(
             self.filepath, self.year, self.baseYear, key=self.key, baseCols=self.baseCols)
     
@@ -80,13 +85,13 @@ class HorizontalProfile(HorizontalSuper):
 
     def create_horiz_analysis(self, endYear, startYear):
         analysis_df = self.calculate_horiz_analysis(endYear=endYear, startYear=startYear)
-        new_horizontal_analysis = HorizontalAnalysis(self.filepath,
-            [(endYear,startYear)],
-            analysis_df,
-            self.symbol,
-            self.outputPath,
-            self.inputPath,
-            self.key,
-            self.baseCols)
+        new_horizontal_analysis = HorizontalAnalysis(filepath=self.filepath,
+            yearsList=[(endYear, startYear)],
+            df=analysis_df,
+            symbol=self.symbol,
+            outputPath=self.outputPath,
+            inputPath=self.inputPath,
+            key=self.key,
+            baseCols=self.baseCols)
         return new_horizontal_analysis
 

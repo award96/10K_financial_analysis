@@ -2,6 +2,21 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+def decorate():
+    plt.ticklabel_format(axis="x", style="sci", scilimits=(6, 6))
+
+
+def analysis_histo(data, title, xaxisLabel,bins=20):
+     # Draw
+    plt.figure(figsize=(16, 9))
+    n, bins, patches = plt.hist(data, bins=bins, color='purple')
+    # Decoration
+    plt.title(title)
+    plt.xlabel(xaxisLabel)
+    decorate()
+    plt.ylabel("Count")
+
+    plt.show()
 
 def basicHisto(filepath, column):
 
@@ -9,11 +24,6 @@ def basicHisto(filepath, column):
     plt.figure(figsize=(3, 2))
     hist = df.hist(column=column, bins=20, figsize=(16, 9))
     plt.show()
-
-
-def decorate():
-    plt.ticklabel_format(axis="x", style="sci", scilimits=(6, 6))
-    plt
 
 
 def histo_by_percentile(filepath, column, percentile=(0, 1), bins=20):
@@ -145,7 +155,7 @@ def example():
 
 #basicHisto('SP10k_data_clean.csv', 'operating')
 #histo_by_range('SP10k_data_clean.csv', 'operating')
-for spending in ['operating']:
-    for focus in [(-7 * 10**8, 4 * 10**9)]:
-        histo_by_range('SP10k_data_clean.csv', spending, x_range=focus)
+# for spending in ['operating']:
+#     for focus in [(-7 * 10**8, 4 * 10**9)]:
+#         histo_by_range('SP10k_data_clean.csv', spending, x_range=focus)
 # example()

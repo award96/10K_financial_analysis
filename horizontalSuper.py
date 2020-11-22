@@ -6,6 +6,7 @@ class HorizontalSuper:
         self,
         filepath,
         symbol=None,
+        industry=None,
         outputPath=None,
         inputPath=None,
         key="netIncome",
@@ -15,6 +16,7 @@ class HorizontalSuper:
             'marketCap']):
         self.filepath = filepath
         self.symbol = symbol
+        self.industry = industry
         self.outputPath = outputPath
         self.inputPath = inputPath
         self.key = key
@@ -26,6 +28,8 @@ class HorizontalSuper:
 
     def get_symbol(self):
         return self.symbol
+    def get_industry(self):
+        return self.industry
 
     def get_outputPath(self):
         return self.outputPath

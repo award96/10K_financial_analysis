@@ -13,7 +13,6 @@ def analysis_naming_convention(endYear, startYear, percent=False):
 def analysis(df, endYear, startYear):
     df = df[df[naming_convention(endYear)].notnull(
     ) & df[naming_convention(startYear)].notnull()]
-    df.info()
     horizontal = []
     horizontalPerc = []
     for index, row in df.iterrows():

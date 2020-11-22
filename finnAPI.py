@@ -23,13 +23,21 @@ API_KEY = get_api_key()
 
 
 def handle_response(response, callback_function, symbol):
+
+    try:
+        someFunction()
+    except Exception as ex:
+        template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+        message = template.format(type(ex).__name__, ex.args)
+        print(message)
+
     try:
         json_resp = response.json()
     except Exception as e:
-        print(f"\n\n{e}")
-        print(f"r:\n{response}")
-        print("if 429 response, rate limit exceeded, the script will proceed in 1 minute\nIf other response, recommended to stop script")
-        time.sleep(60)
+        print(type(e))
+        seconds = 60
+        print(f"API rate limit exceeded. Pausing {seconds/60} minute(s)")
+        time.sleep(seconds)
         json_resp = callback_function(symbol)
     return json_resp
 

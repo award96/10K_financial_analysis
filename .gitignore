@@ -10,3 +10,5 @@ yahooStocks
 .DS_Store
 finnhub_exploring
 test*
+temp*
+NYSE.txt

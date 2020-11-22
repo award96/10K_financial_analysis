@@ -12,6 +12,9 @@ def read_lines_to_array(filepath):
     lines_arr = []
     with open(filepath, 'r') as file:
         for line in file:
+            if ("-" in line) or ("." in line):
+                print(f"skipped line: {line}")
+                continue
             line = line.replace("\n", "")
             lines_arr.append(line)
     return lines_arr
