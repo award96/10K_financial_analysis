@@ -1,14 +1,7 @@
-Edgar
 *pycache*
-plotting
 *.csv
 api.txt
-finnData
-yahooStocks
 *.pyc
 *.pyo
 .DS_Store
-finnhub_exploring
-test*
-temp*
 NYSE.txt

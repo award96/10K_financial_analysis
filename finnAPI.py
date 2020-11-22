@@ -1,4 +1,5 @@
 import requests
+import json
 import time
 
 """
@@ -24,17 +25,12 @@ API_KEY = get_api_key()
 
 def handle_response(response, callback_function, symbol):
 
-    try:
-        someFunction()
-    except Exception as ex:
-        template = "An exception of type {0} occurred. Arguments:\n{1!r}"
-        message = template.format(type(ex).__name__, ex.args)
-        print(message)
-
+    # catch response 429 (api limit reached) but not other json decoding errors
     try:
         json_resp = response.json()
-    except Exception as e:
-        print(type(e))
+    except json.decoder.JSONDecodeError as e:
+        if (response.status_code != 429):
+            raise json.decoder.JSONDecodeError(f"\n\nJSONDecodeError\nresponse status: {response.status_code}\nThis usually means either a bad API key or internet connection issues\n", e.doc, e.pos)
         seconds = 60
         print(f"API rate limit exceeded. Pausing {seconds/60} minute(s)")
         time.sleep(seconds)

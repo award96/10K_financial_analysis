@@ -142,12 +142,6 @@ def add_profile_data(inputPath, outputPath):
     print(df)
     df.to_csv(outputPath)
 
-
-if __name__ == "__main__":
-    import sys
-    inputPath = 'SPlist.txt'
-    outputPath = 'SP10k_data.csv'
-    if len(sys.argv) > 1:
-        inputPath, outputPath = sys.argv[1], sys.argv[2]
+def collect(inputPath, outputPath, apiKeyPath):
     collect_tenK_data(inputPath, outputPath)
     add_profile_data(outputPath, outputPath)

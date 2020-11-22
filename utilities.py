@@ -23,3 +23,14 @@ def clean_duplicates(messyList):
             output.append(item)
             d[item] = True
     return output
+
+def generate_all_year_pairs(yearRange):
+    allPairs = []
+    high, low = yearRange[0], yearRange[1]
+    while high > low:
+        while low < high:
+            allPairs.append((high, low))
+            low += 1
+        low = yearRange[1]
+        high -= 1
+    return allPairs

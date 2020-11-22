@@ -83,14 +83,14 @@ class HorizontalProfile(HorizontalSuper):
         analysis_df = analysis_df.drop(columns = oldColumns)
         return analysis_df
 
-    def create_horiz_analysis(self, endYear, startYear):
+    def create_horiz_analysis(self, endYear, startYear, analysisOutput):
         analysis_df = self.calculate_horiz_analysis(endYear=endYear, startYear=startYear)
         new_horizontal_analysis = HorizontalAnalysis(filepath=self.filepath,
             yearsList=[(endYear, startYear)],
             df=analysis_df,
             symbol=self.symbol,
-            outputPath=self.outputPath,
-            inputPath=self.inputPath,
+            outputPath=analysisOutput,
+            inputPath=self.outputPath,
             key=self.key,
             baseCols=self.baseCols)
         return new_horizontal_analysis
