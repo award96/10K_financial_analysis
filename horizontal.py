@@ -23,8 +23,12 @@ def main(
         outputPath=horizontalOutput)
     if not horizontalInput:
         HP.write_to_output()
-    for yearTuple in generate_all_year_pairs(yearRange):
-        # analysisOutput = exampleName2019-2011.csv
-        analysisOutput = analysisBaseName + str(yearRange[1]) + "-" + str(yearRange[0]) + ".csv"
-        HA = HP.create_horiz_analysis(yearTuple[0], yearTuple[1], analysisOutput)
-    
+    if analyzeAllYears:
+        for yearTuple in generate_all_year_pairs(yearRange):
+            # analysisOutput = exampleName2019-2011.csv
+            analysisOutput = analysisBaseName + str(yearRange[1]) + "-" + str(yearRange[0]) + ".csv"
+            HA = HP.create_horiz_analysis(yearTuple[0], yearTuple[1], analysisOutput)
+    else:
+        for yearTuple in specificYears:
+            analysisOutput = analysisBaseName + str(yearRange[1]) + "-" + str(yearRange[0]) + ".csv"
+            HA = HP.create_horiz_analysis(yearTuple[0], yearTuple[1], analysisOutput)
