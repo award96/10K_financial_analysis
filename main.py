@@ -10,7 +10,7 @@
 #   which years
 
 def intro(d):
-    runDefault = input("Make sure your api key is in a file named \"api.txt\"\n\nRun default settings?\n[y/n] ... type [l] for a list of the default settings")
+    runDefault = input("\nRun default settings?\n[Y/N] ... type [L] for a list of the default settings\n")
 
     if runDefault.lower() == 'l':
         for key in d:
@@ -35,6 +35,10 @@ if __name__ == "__main__":
     from horizontal import main
     from collectData import collect
     d = {}
+
+    """
+        Edit these settings below to fit your needs
+    """
     d['record new data'] = True
     d['input path'] = 'NYSE_symbols.txt'
     d['output path'] = 'NYSE10Kdata.csv'
@@ -44,6 +48,8 @@ if __name__ == "__main__":
     d['analysis output base-name'] = 'NYSE10K_horizontal_analysis'
     d['analyze all year pairs'] = True
     d['specific year pairs'] = None
+
+
 
     d = intro(d)
 
