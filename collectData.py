@@ -95,12 +95,7 @@ def collect_tenK_data(inputPath, outputPath):
         tenkJson = finnAPI.get_tenK_json(symbol)
         newRows = parseTenK(tenkJson)
         dataArr.extend(newRows)
-    print("done collecting data")
-    print("Number of rows collected:")
-    print(len(dataArr))
     df = pd.DataFrame(dataArr, columns=columns)
-    df.info()
-    print(df)
     df.to_csv(outputPath)
 
 
@@ -117,19 +112,18 @@ def add_profile_data(inputPath, outputPath):
     marketCap_arr = []
     for index, row in df.iterrows():
         symbol = row['symbol']
-        print(f"\non symbol: {symbol}\n")
+        
         if symbol in symbol_dict:
-            print("symbol already recorded")
             new_data_arr = symbol_dict[symbol]
             industry_arr.append(new_data_arr[0])
             marketCap_arr.append(new_data_arr[1])
             continue
+        print(f"\nAdding profile data to: {symbol}\n")
         profile_json = finnAPI.get_profile_json(symbol)
         industry, marketCap = parseProfile(profile_json)
         industry_arr.append(industry)
         marketCap_arr.append(marketCap)
         symbol_dict[symbol] = [industry, marketCap]
-    print("\ndone\nAdding arrays to columns\n###################\n")
     loc1 = len(df.columns)
     loc2 = loc1 + 1
     try:
@@ -138,8 +132,6 @@ def add_profile_data(inputPath, outputPath):
     except Exception:
         df.insert(loc=4, column="industry", value=industry_arr)
         df.insert(loc=5, column="marketCap", value=marketCap_arr)
-    print(df.info())
-    print(df)
     df.to_csv(outputPath)
 
 def collect(inputPath, outputPath):
