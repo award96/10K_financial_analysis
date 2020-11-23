@@ -10,14 +10,18 @@ API_KEY_PATH = "api.txt"
 
 
 def get_api_key():
-
-    with open(API_KEY_PATH, 'r') as file:
-        api_key_raw = file.readline()
-        if "\n" in api_key_raw:
-            api_key = api_key_raw.replace("\n", "")
-        else:
-            api_key = api_key_raw
-        return api_key
+    try:
+        with open(API_KEY_PATH, 'r') as file:
+            api_key_raw = file.readline()
+            if "\n" in api_key_raw:
+                api_key = api_key_raw.replace("\n", "")
+            else:
+                api_key = api_key_raw
+            return api_key
+    except FileNotFoundError as e:
+        print(e)
+        print("Please include a file named api.txt with your api key in the same folder as this program")
+        exit()
 
 
 API_KEY = get_api_key()
