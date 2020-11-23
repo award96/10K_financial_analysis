@@ -1,14 +1,3 @@
-# collect data
-#   optional skip
-#   input/output path
-#   api key path/ type api key
-# profile data
-#   which years
-#   already created?
-#   input/output path
-# analyze data
-#   which years
-
 def intro(d):
     runDefault = input("\nRun default settings?\n[Y/N] ... type [L] for a list of the default settings\n")
 
@@ -21,7 +10,7 @@ def intro(d):
     elif runDefault.lower() == 'n':
         # Could write a function to change the values of d and then return d, but this is faster
         print("open main.py and edit the values of the variable 'd'\nYou should see them under 'if __name__ == '__main__':")
-
+        exit()
     elif runDefault.lower() == 'y':
         yearTuple = d['year range']
         if yearTuple[0] < yearTuple[1]:
@@ -52,9 +41,10 @@ if __name__ == "__main__":
 
 
     d = intro(d)
-
     if d['record new data']:
+        print(f"Collecting new data to filepath: {d['output path']}")
         collect(d['input path'], d['output path'])
+    print("\n\nBeginning analysis")
     main(
         d['output path'],
         d['year range'], 
@@ -64,4 +54,5 @@ if __name__ == "__main__":
         d['analyze all year pairs'], 
         d['specific year pairs']
         )
+    print("\nDone!")
 

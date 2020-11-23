@@ -142,6 +142,6 @@ def add_profile_data(inputPath, outputPath):
     print(df)
     df.to_csv(outputPath)
 
-def collect(inputPath, outputPath, apiKeyPath):
+def collect(inputPath, outputPath):
     collect_tenK_data(inputPath, outputPath)
     add_profile_data(outputPath, outputPath)
