@@ -6,6 +6,14 @@ from horizontalProfile import HorizontalProfile
 from horizontalAnalysis import HorizontalAnalysis
 from utilities import generate_all_year_pairs
 
+def analyze(HP, yearTuple, analysisBaseName):
+     # analysisOutput = exampleName2019-2011.csv
+    print(f"\nAnalyzing {yearTuple}")
+    analysisOutput = analysisBaseName + str(yearTuple[1]) + "-" + str(yearTuple[0]) + ".csv"
+    HA = HP.create_horiz_analysis(yearTuple[0], yearTuple[1], analysisOutput)
+    HA.write_to_output()
+    print(f"writing to {HA.get_outputPath()}\n")
+
 def main(
         outputPath,
         yearRange, 
@@ -25,10 +33,7 @@ def main(
         HP.write_to_output()
     if analyzeAllYears:
         for yearTuple in generate_all_year_pairs(yearRange):
-            # analysisOutput = exampleName2019-2011.csv
-            analysisOutput = analysisBaseName + str(yearRange[1]) + "-" + str(yearRange[0]) + ".csv"
-            HA = HP.create_horiz_analysis(yearTuple[0], yearTuple[1], analysisOutput)
+            analyze(HP, yearTuple, analysisBaseName)
     else:
         for yearTuple in specificYears:
-            analysisOutput = analysisBaseName + str(yearRange[1]) + "-" + str(yearRange[0]) + ".csv"
-            HA = HP.create_horiz_analysis(yearTuple[0], yearTuple[1], analysisOutput)
+            analyze(HP, yearTuple, analysisBaseName)
