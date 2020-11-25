@@ -16,5 +16,9 @@ python main.py
 Type 'Y' to start the script, 'L' to see the current settings, and 'N' to cancel the script. (Not case-sensitive).
 # Example Data Insights
 ![A histogram of the percent change of Net Income for NYSE companies over 2018-2019. Not every NYSE company was available through FinnHub. The high and low outliers have been excluded to fit the graph onto one page.](./example_graphs/histo_2018-2019.png)
+
+
 ![A bar graph comparing the percent change of Net Income for NYSE companies across industry for 2018-2019. Not every NYSE company was available through FinnHub. The number of companies behind each data point varies, the minimum being 10.](./example_graphs/perc_change_by_industry.png)
-![A bar graph indicating the number of companies behind each data point of the previous graph](./example_graphs/perc_change_by_industry.png)
+
+
+![A bar graph indicating the number of companies behind each data point of the previous graph](./example_graphs/count_by_industry.png)
