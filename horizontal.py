@@ -21,14 +21,16 @@ def main(
         horizontalOutput,
         analysisBaseName,
         analyzeAllYears, 
-        specificYears
+        specificYears,
+        key
         ):
 
     HP = HorizontalProfile(filepath=outputPath,
         baseYear=yearRange[1],
         year=yearRange[0],
         inputPath=horizontalInput,
-        outputPath=horizontalOutput)
+        outputPath=horizontalOutput,
+        key=key)
     if not horizontalInput:
         HP.write_to_output()
     if analyzeAllYears:
