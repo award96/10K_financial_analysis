@@ -37,6 +37,7 @@ if __name__ == "__main__":
     d['analysis output base-name'] = 'NYSE10K_horizontal_analysis'
     d['analyze all year pairs'] = True
     d['specific year pairs'] = None
+    d['value key'] = 'netIncome'
 
 
 
@@ -52,7 +53,8 @@ if __name__ == "__main__":
         d['horizontal data output'],
         d['analysis output base-name'],
         d['analyze all year pairs'], 
-        d['specific year pairs']
+        d['specific year pairs'],
+        d['value key']
         )
     print("\nDone!")
 
